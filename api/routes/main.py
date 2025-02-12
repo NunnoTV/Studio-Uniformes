@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, send_file
-from app.services import image_service
-from app.constants import COMPRESSED_FILE
+from api.services import image_service
+from api.constants import COMPRESSED_FILE
 
 main_bp = Blueprint("main", __name__)
 
