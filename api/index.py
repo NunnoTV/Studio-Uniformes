@@ -1,9 +1,12 @@
 from flask import Flask
 import os
 from flask import request, jsonify, send_file
-from constants import COMPRESSED_FILE
+#from api.constants import COMPRESSED_FILE
+from .constants import COMPRESSED_FILE
 from services import image_service
 
+
+print("Diretório de Trabalho:", os.getcwd())
 
 
 app = Flask(__name__)
@@ -36,8 +39,6 @@ def download():
     return send_file(COMPRESSED_FILE, as_attachment=True)
 
 
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 3000))
-    app.run(debug=True, host="0.0.0.0", port=port)
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 3000)))
 

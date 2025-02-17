@@ -8,5 +8,3 @@ if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=port)
 
 
-def test_app():
-    print("Testando a aplicação...")

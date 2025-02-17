@@ -5,7 +5,7 @@ from zipfile import ZipFile
 from io import BytesIO
 from PIL import Image, ImageDraw
 
-from constants import (
+from api.constants import (
     TAMANHOS,
     CROP_MANGA_ESQUERDA,
     CROP_MANGA_DIREITA,
@@ -21,7 +21,7 @@ from constants import (
     FONTE_INFO,
     FONTE_NUMERO_SHORT,
 )
-from utils.file_utils import criar_diretorio_se_nao_existir
+from api.utils.file_utils import criar_diretorio_se_nao_existir
 
 def gerar_imagem(molde_resized, crop, texto, fonte, nome_arquivo, tamanho=None, numero=None):
     img = molde_resized.crop(crop)

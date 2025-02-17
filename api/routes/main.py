@@ -4,6 +4,13 @@ from api.constants import COMPRESSED_FILE
 
 main_bp = Blueprint("main", __name__)
 
+
+@main_bp.route("/")
+def home():
+    return "Hello, World!"
+
+
+
 @main_bp.route("/", methods=["POST"])
 def diagramar():
     try:
