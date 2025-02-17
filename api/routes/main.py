@@ -11,7 +11,7 @@ def home():
 
 
 
-@main_bp.route("/", methods=["POST"])
+@main_bp.route("/diagramar", methods=["POST"])
 def diagramar():
     try:
         dados = request.get_json()
