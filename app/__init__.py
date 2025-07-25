@@ -14,7 +14,6 @@ def create_app():
     from .routes import main_bp
     app.register_blueprint(main_bp)
 
-    # Error Handlers
     @app.errorhandler(413)
     def too_large(e):
         return jsonify({"erro": "Arquivo muito grande. Tamanho máximo: 500MB"}), 413
@@ -26,14 +25,5 @@ def create_app():
     @app.errorhandler(500)
     def internal_error(e):
         return jsonify({"erro": "Erro interno do servidor"}), 500
-
-    print("🚀 API de Redimensionamento de Imagens inicializada.")
-    print(f"📐 Tamanho do molde: {Config.SIZE_MOLDE[0]}x{Config.SIZE_MOLDE[1]}")
-    print("🎨 PRESERVAÇÃO DE COR: Modo de cor original será mantido (RGB, CMYK, L, etc.)")
-    print("📋 Tamanhos disponíveis:", list(Config.TAMANHOS.keys()))
-    print("✂️  Crops disponíveis:", list(Config.CROPS.keys()))
-    print("🔄 Crops que serão redimensionados:", Config.CROPS_PARA_REDIMENSIONAR)
-    print("💾 Formato de arquivo: crop_name_tamanho_quantidade_unidades.jpg/png (baseado no modo de cor)")
-
 
     return app

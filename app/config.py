@@ -2,8 +2,15 @@ import os
 
 class Config:
     MAX_CONTENT_LENGTH = 500 * 1024 * 1024  # 500MB max file size
-    UPLOAD_FOLDER = 'uploads'
-    OUTPUT_FOLDER = 'outputs'
+
+    if os.getenv('VERCEL') == '1':
+        # Use o diretório /tmp no ambiente Vercel (que é gravável)
+        UPLOAD_FOLDER = '/tmp/uploads'
+        OUTPUT_FOLDER = '/tmp/outputs'
+    else:
+        # Use diretórios locais para desenvolvimento
+        UPLOAD_FOLDER = 'uploads'
+        OUTPUT_FOLDER = 'outputs'
 
     # Tamanho do molde - medida padrão para redimensionar antes dos crops
     SIZE_MOLDE = (20942, 9449)
