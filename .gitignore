@@ -1,0 +1,8 @@
+outputs/
+*.zip
+*.log
+/_pycache__
+.venv/
+*.pyc
+logs/
+uploads/
