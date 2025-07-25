@@ -1,7 +1,7 @@
 from flask import Flask
 import os
 from .config import Config
-import jsonify
+from flask import jsonify
 
 def create_app():
     app = Flask(__name__)
