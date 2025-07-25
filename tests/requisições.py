@@ -1,19 +1,16 @@
 import requests
 
-url = "C:/Users/brunn/OneDrive/Documentos/Studio Uniformes/molde.jpg"
+url = "https://i.ibb.co/qMQq7qnG/molde.png"
 
 body = {
-        "local_path": url,
+        "url": url,
         "tamanhos": {
             "EXG": 21,
-            "GG": 67,
-            "G": 175,
-            "M": 154,
-            "P": 83 
+            "GG": 67
         }
     }
 
-response = requests.post("http://localhost:5000/process", json=body, headers={"Content-Type": "application/json"})
+response = requests.post("https://studio-uniformes.vercel.app/process", json=body, headers={"Content-Type": "application/json"})
 
 #download_id = response.json()['detalhes']['download_id']
 
