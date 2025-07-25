@@ -2,7 +2,7 @@ outputs/
 *.zip
 *.log
 /_pycache__
-.venv/
+venv/
 *.pyc
 logs/
 uploads/
