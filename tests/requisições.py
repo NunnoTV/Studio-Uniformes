@@ -10,10 +10,10 @@ body = {
         }
     }
 
-response = requests.post("https://studio-uniformes.vercel.app/process", json=body, headers={"Content-Type": "application/json"})
+response = requests.post("http://localhost:80/process", json=body, headers={"Content-Type": "application/json"})
 
-#download_id = response.json()['detalhes']['download_id']
+download_id = response.json()['detalhes']['download_id']
 
 print(f"Status Code: {response.status_code}")
-#print(f"O download_id é: {download_id}")
+print(f"O download_id é: {download_id}")
 print(f"Response: {response.json()}")

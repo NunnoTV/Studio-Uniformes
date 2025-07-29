@@ -9,8 +9,10 @@ class Config:
         OUTPUT_FOLDER = '/tmp/outputs'
     else:
         # Use diretórios locais para desenvolvimento
-        UPLOAD_FOLDER = 'uploads'
-        OUTPUT_FOLDER = 'outputs'
+        # O __file__ aponta para app/config.py, então subimos um nível para a raiz do projeto.
+        basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+        UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
+        OUTPUT_FOLDER = os.path.join(basedir, 'outputs')
 
     # Tamanho do molde - medida padrão para redimensionar antes dos crops
     SIZE_MOLDE = (20942, 9449)

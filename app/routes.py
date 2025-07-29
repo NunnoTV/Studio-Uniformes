@@ -1,11 +1,13 @@
 import json
-from flask import Blueprint, request, jsonify, send_file, current_app
+from flask import Blueprint, request, jsonify, send_file, current_app, after_this_request
 from .utils import download_image_from_url, load_image_from_local_path, load_image_from_upload
 from .processing import process_image, create_zip_file
 from .config import Config
 import os
 from datetime import datetime
 import shutil # For cleaning up temporary directories
+import time
+import threading
 
 main_bp = Blueprint('main', __name__)
 
@@ -244,17 +246,37 @@ def process_image_endpoint():
         current_app.logger.error(f"Erro interno no endpoint: {str(e)}", exc_info=True)
         return jsonify({"erro": f"Erro interno: {str(e)}"}), 500
 
+def delete_file_after_delay(path, delay, logger):
+    """Função para deletar um arquivo após um certo delay (em segundos)."""
+    time.sleep(delay)
+    try:
+        os.remove(path)
+        logger.info(f"Arquivo {os.path.basename(path)} excluído com sucesso após {delay} segundos.")
+    except FileNotFoundError:
+        logger.warning(f"Arquivo {os.path.basename(path)} não encontrado para exclusão, pode já ter sido removido.")
+    except Exception as e:
+        logger.error(f"Erro ao excluir o arquivo {os.path.basename(path)}: {e}")
+
 @main_bp.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
-    """Endpoint para download do arquivo ZIP processado"""
+    """Endpoint para download do arquivo ZIP processado com exclusão agendada."""
     try:
         file_path = os.path.join(current_app.config['OUTPUT_FOLDER'], filename)
         
         if not os.path.exists(file_path):
             current_app.logger.warning(f"Tentativa de download de arquivo não encontrado: {filename}")
-            return jsonify({"erro": "Arquivo não encontrado"}), 404
+            return jsonify({"erro": "Arquivo não encontrado ou já baixado"}), 404
+
+        # Agenda a exclusão do arquivo para 5 minutos (300 segundos) no futuro.
+        # Passamos a instância do logger para a thread, pois o contexto da aplicação não estará disponível.
+        deleter_thread = threading.Thread(
+            target=delete_file_after_delay,
+            args=(file_path, 300, current_app.logger)
+        )
+        deleter_thread.start()
+
+        current_app.logger.info(f"Servindo download de arquivo: {filename}. Exclusão agendada para 5 minutos.")
         
-        current_app.logger.info(f"Servindo download de arquivo: {filename}")
         return send_file(
             file_path,
             as_attachment=True,
