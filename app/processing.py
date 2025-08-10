@@ -5,6 +5,19 @@ import tempfile
 import uuid
 from .config import Config
 
+# Adicionado para pré-redimensionamento
+MAX_IMAGE_SIZE = (4000, 4000)  # Define um tamanho máximo para a imagem de entrada
+
+def pre_resize_image(image, max_size=MAX_IMAGE_SIZE):
+    """
+    Redimensiona a imagem se ela exceder as dimensões máximas, mantendo a proporção.
+    """
+    if image.width > max_size[0] or image.height > max_size[1]:
+        print(f"⚠️  Imagem original ({image.width}x{image.height}) excede o limite de {max_size[0]}x{max_size[1]}.")
+        image.thumbnail(max_size, Image.Resampling.LANCZOS)
+        print(f"➡️  Imagem pré-redimensionada para {image.width}x{image.height} para economizar memória.")
+    return image
+
 def get_fill_color_for_mode(mode):
     """
     Retorna a cor de preenchimento apropriada para cada modo de cor
@@ -195,17 +208,20 @@ def get_save_format_and_params(image):
     if mode in ['RGBA', 'LA'] or 'transparency' in image.info:
         return 'PNG', {}
     
-    # Para imagens CMYK, salvar como JPEG com qualidade alta
+    # Para imagens CMYK, salvar como JPEG com qualidade otimizada
     elif mode == 'CMYK':
-        return 'JPEG', {'quality': 50, 'optimize': True, "dpi": (300, 300)}
+        return 'JPEG', {'quality': 45, 'optimize': True, "dpi": (300, 300)}
     
     # Para outros modos (RGB, L, etc.), salvar como JPEG
     else:
-        return 'JPEG', {'quality': 50, 'optimize': True, "dpi": (300, 300)}
+        return 'JPEG', {'quality': 45, 'optimize': True, "dpi": (300, 300)}
 
 def process_image(image, tamanhos_solicitados):
     """Processa a imagem principal gerando todos os crops e redimensionamentos"""
     try:
+        # PASSO 0: Pré-redimensionar a imagem para evitar consumo excessivo de memória
+        image = pre_resize_image(image)
+
         # Criar diretório temporário para os resultados
         temp_dir = tempfile.mkdtemp()
         processed_files = []

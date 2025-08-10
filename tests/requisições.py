@@ -1,6 +1,6 @@
 import requests
 
-url = "C:\\Users\\brunn\\OneDrive\\Documentos\\app uniforme\\sistema.jpg"
+url = "C:\\Users\\brunn\\OneDrive\\Documentos\\app uniforme\\uploads\\hc.jpg"
 
 body = {
         "local_path": url,
