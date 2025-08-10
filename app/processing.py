@@ -222,19 +222,25 @@ def process_image(image, tamanhos_solicitados):
         for tamanho, quantidade in tamanhos_solicitados.items():
             if tamanho not in Config.TAMANHOS:
                 continue
-            
-            target_size = Config.TAMANHOS[tamanho]
+
             print(f"📏 Processando tamanho {tamanho} ({quantidade} unidades)")
-            
+
             # Processar cada crop
             for crop_name, crop_coords in Config.CROPS.items():
                 print(f"✂️  Aplicando crop: {crop_name}")
-                
+
                 # Fazer o crop na imagem do molde
                 cropped_image = crop_image(molde_image, crop_coords)
-                
-                # Se for FRENTE ou COSTAS, redimensionar
-                if crop_name in Config.CROPS_PARA_REDIMENSIONAR:
+
+                # Determinar o nome do crop para o dicionário de tamanhos
+                if 'MANGA' in crop_name:
+                    tamanho_key = 'MANGAS'
+                else:
+                    tamanho_key = crop_name
+
+                # Redimensionar o crop para o tamanho específico
+                if tamanho_key in Config.TAMANHOS[tamanho]:
+                    target_size = Config.TAMANHOS[tamanho][tamanho_key]
                     final_image = resize_image(cropped_image, target_size)
                     print(f"🔄 Redimensionando {crop_name} para {target_size}")
                 else:
