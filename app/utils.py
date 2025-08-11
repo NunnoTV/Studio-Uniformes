@@ -1,3 +1,5 @@
+import requests
+
 def download_image_from_url(url):
     """
     Baixa uma imagem de uma URL e retorna seus dados em bytes.
